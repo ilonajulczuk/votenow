@@ -1,9 +1,10 @@
 package uk.ilcz.votenow;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,23 +13,36 @@ import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String TAG = MainActivity.class.getSimpleName();
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        setContentView(R.layout.activity_main);
+//        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
+//        recList.setHasFixedSize(true);
+//        LinearLayoutManager llm = new LinearLayoutManager(this);
+//        llm.setOrientation(LinearLayoutManager.VERTICAL);
+//        recList.setLayoutManager(llm);
+//
+//        PollAdapter pa = new PollAdapter(createList(20));
+//        recList.setAdapter(pa);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
-        recList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
 
-        PollAdapter pa = new PollAdapter(createList(20));
-        recList.setAdapter(pa);
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            Log.v(TAG, "ble ble");
+            MainPollFragment fragment = new MainPollFragment();
+            transaction.replace(R.id.poll_fragment, fragment);
+            transaction.commit();
+        }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,21 +63,4 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private List<Poll> createList(int size) {
-
-        List<Poll> result = new ArrayList<Poll>();
-        for (int i=1; i <= size; i++) {
-            Poll poll = new Poll();
-            poll.title = Poll.TITLE_PREFIX + i;
-            poll.closesAt = "Friday";
-            poll.createdAt = "Today";
-            poll.creator = "Justyna";
-            poll.state = "Open";
-            poll.updatedAt = "Today";
-
-            result.add(poll);
-        }
-
-        return result;
-    }
 }
