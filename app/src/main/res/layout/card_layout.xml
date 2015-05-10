@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="right"
-        >
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/title"
@@ -22,8 +23,8 @@
             android:gravity="center_vertical"
             android:textSize="20dp"
             android:layout_alignParentTop="true"
-            android:layout_alignLeft="@+id/txtName"
-            android:layout_marginBottom="10dp" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/txtName"
@@ -54,10 +55,9 @@
             android:layout_height="wrap_content"
             android:text="Someone"
             android:textSize="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_alignBottom="@+id/txtName"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="150dp"
-            android:layout_alignBaseline="@id/txtName"/>
+            android:layout_alignParentEnd="true" />
 
 
     </RelativeLayout>

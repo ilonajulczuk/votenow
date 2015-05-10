@@ -25,8 +25,8 @@ public class MainActivity extends ActionBarActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        PollAdapter ca = new PollAdapter(createList(20));
-        recList.setAdapter(ca);
+        PollAdapter pa = new PollAdapter(createList(20));
+        recList.setAdapter(pa);
     }
 
 
