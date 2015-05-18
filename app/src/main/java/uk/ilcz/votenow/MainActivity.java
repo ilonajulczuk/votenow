@@ -4,8 +4,16 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.syncano.library.Syncano;
+import com.syncano.library.annotation.SyncanoClass;
+import com.syncano.library.annotation.SyncanoField;
+import com.syncano.library.api.Response;
+import com.syncano.library.callbacks.SyncanoCallback;
+import com.syncano.library.data.SyncanoObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +22,42 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
 
+    private Syncano syncano;
+
+    @SyncanoClass(name = "book")
+    public class Book extends SyncanoObject {
+
+        public static final String FIELD_TITLE = "title";
+        public static final String FIELD_SUBTITLE = "subtitle";
+
+        @SyncanoField(name = FIELD_TITLE)
+        public String title;
+
+        @SyncanoField(name = FIELD_SUBTITLE)
+        public String subtitle;
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        syncano = new Syncano("90c7acac80305381e25a4b635c9211d38fd42918", "superduperinstance");
+        SyncanoCallback<List<Book>> callback = new SyncanoCallback<List<Book>>() {
+            @Override
+            public void success(Response<List<Book>> response, List<Book> result) {
+                // Request succeed.
+                Log.v(LOG_TAG, "Success in syncano callback!");
+                Log.v(LOG_TAG, Integer.toString(result.size()));
+            }
+
+            @Override
+            public void failure(Response<List<Book>> response) {
+                // Something went wrong. Check error codes in response object.
+                Log.v(LOG_TAG, "Failure in syncano callback!");
+            }
+        };
+
+        syncano.getObjects(Book.class).sendAsync(callback);
 
         setContentView(R.layout.activity_main);
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
@@ -25,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        PollAdapter pa = new PollAdapter(createList(20));
+        PollAdapter pa = new PollAdapter(createList(20), this);
         recList.setAdapter(pa);
     }
 
@@ -60,6 +101,7 @@ public class MainActivity extends ActionBarActivity {
             poll.creator = "Justyna";
             poll.state = "Open";
             poll.updatedAt = "Today";
+            poll.id = Integer.toString(i);
 
             result.add(poll);
         }

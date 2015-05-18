@@ -11,6 +11,7 @@ public class Poll {
     protected String createdAt;
     protected String updatedAt;
     protected String closesAt;
+    protected String id;
 
     protected static final String TITLE_PREFIX = "Poll-";
 }
